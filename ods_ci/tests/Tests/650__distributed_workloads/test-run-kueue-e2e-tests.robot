@@ -53,6 +53,15 @@ Prepare Kueue E2E Test Suite
     ${return_code} =    Run And Return Rc    oc label ${WORKER_NODE} instance-type=on-demand
     Should Be Equal As Integers  ${return_code}   0   msg=Fail to label worker node with instance-type=on-demand
 
+    # Check version of oc
+    Log To Console    Check version of oc  ...
+    ${result} =    Run Process    oc version
+    ...    shell=true    stderr=STDOUT
+    Log To Console    ${result.stdout}
+    IF    ${result.rc} != 0
+        FAIL    Fail to check version of oc
+    END
+
     # Use Go install command to install ginkgo
     Log To Console    Install ginkgo ...
     ${result} =    Run Process    go install github.com/onsi/ginkgo/v2/ginkgo
