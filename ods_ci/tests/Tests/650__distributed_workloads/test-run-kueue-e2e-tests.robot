@@ -13,6 +13,7 @@ ${KUEUE_REPO_URL}       %{KUEUE_REPO_URL=https://github.com/kubernetes-sigs/kueu
 ${KUEUE_REPO_BRANCH}    %{KUEUE_REPO_BRANCH=main}
 ${JOB_GO_BIN}           %{WORKSPACE=.}/go-bin
 ${WORKER_NODE}          ${EMPTY}
+${KUBECONFIG}           %{WORKSPACE=.}/kconfig
 
 
 *** Test Cases ***
@@ -92,6 +93,7 @@ Run Kueue E2E Test
     ${result} =    Run Process    ginkgo --focus-file\=${test_name} ${KUEUE_DIR}/test/e2e/singlecluster
     ...    shell=true    stderr=STDOUT
     ...    env:PATH=%{PATH}:${JOB_GO_BIN}
+    ...    env:KUBECONFIG=${KUBECONFIG}
     Log To Console    ${result.stdout}
     IF    ${result.rc} != 0
         FAIL    failed
